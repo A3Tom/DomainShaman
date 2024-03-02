@@ -14,7 +14,7 @@ jobs:
       - name: Banksy
         shell: pwsh
         run: |
-          .\version_changer.ps1
+          .\version_chanter.ps1
 
       - name: Run a multi-line script
         run: |
