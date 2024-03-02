@@ -7,7 +7,6 @@ $pipelineProvider = "github"
 $minorVersionMergeSources = @("bugfix", "slampy")
 
 function Get-MergeSourceBranchRegex {
-    # Maybe make case agnostic ? 
     $branchNames = $minorVersionMergeSources -join "|"
     "[from\w]\S+[\/](?:$branchNames)\/\S+"
 }
