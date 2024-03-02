@@ -1,8 +1,24 @@
 git fetch --tags
 $tags = git tag
 #$mostRecentCommit = git log -1
-$mostRecentCommit = git log e967c221e439ffe4dfcf0c7d985dd012fe48c0af -1
+$targetCommitId = "e967c221e439ffe4dfcf0c7d985dd012fe48c0af"
+$mostRecentCommit = git log $targetCommitId -1
 $pipelineProvider = "github"
+$minorVersionMergeSources = @("bugfix", "slampy")
+
+function Get-MergeSourceBranchRegex {
+    # Maybe make case agnostic ? 
+    $branchNames = $minorVersionMergeSources -join "|"
+    "[from\w]\S+[\/](?:$branchNames)\/\S+"
+}
+
+function Assert-IncrementMinorVersion {
+    $minorVersionMergeSources = Get-MergeSourceBranchRegex
+    If ($mostRecentCommit -match $minorVersionMergeSources) {
+        return $true
+    }
+    $false
+}
 
 function Assert-IsGithubMergeCommit {
     Write-Host "Checking if this is a merge commit $mostRecentCommit"
@@ -42,19 +58,20 @@ function Get-CurrentVersion {
 function Get-NextVersion {
     param (
         [System.Version]$latestVersion,
-        [bool]$isPatchRevision
+        [bool]$isMinorRevision
     )
-    $nextPatchVersion = $latestVersion.Major, $latestVersion.Minor, ($latestVersion.Build + 1) -join "."
     $nextMinorVersion = $latestVersion.Major, ($latestVersion.Minor + 1), 0 -join "."
-    Write-Host "Next patch version: $nextPatchVersion"
+    $nextPatchVersion = $latestVersion.Major, $latestVersion.Minor, ($latestVersion.Build + 1) -join "."
     Write-Host "Next minor version: $nextMinorVersion"
+    Write-Host "Next patch version: $nextPatchVersion"
 
-    if ($isPatchRevision) {
-        $nextPatchVersion
-    } else {
+    if ($isMinorRevision) {
         $nextMinorVersion
+    } else {
+        $nextPatchVersion
     }
 }
+
 
 $isMergeVersion = Get-IsMergeCommit 
 
@@ -63,11 +80,16 @@ if (!$isMergeVersion)
     Write-Host "This is not a merge commit. Skipping versioning."
     exit 0
 }
-
 Write-Host "This is a merge commit. Proceeding with versioning."
-$isPatchRevision = $true
+
+$isMinorRevision = Assert-IncrementMinorVersion
+Write-Host "Is minor revision: $isMinorRevision"
 
 $latestVersion = Get-CurrentVersion -tags $tags
-$nextVersion = Get-NextVersion -latestVersion $latestVersion -isPatchRevision $isPatchRevision
+$nextVersion = Get-NextVersion -latestVersion $latestVersion -isMinorRevision $isMinorRevision
 
 Write-Host "Next version: $nextVersion"
+
+# Tag git commit
+git tag -a "release/v$nextVersion" -m "Release v$nextVersion"
+git push --tag
