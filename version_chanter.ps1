@@ -45,16 +45,6 @@ function Assert-IsArgumentValidCommitId {
         exit 1
     }
     
-    $latestMergeCommit = git log -1 --merges --pretty=format:"%h"
-    Write-Host "Latest merge commit: $latestMergeCommit"
-
-    if ($latestMergeCommit -ne $commitId.Substring(0, 7)) {
-        Write-Error "The provided commit id is not the latest merge commit. Skipping versioning." -Category InvalidArgument
-        exit 1
-    }
-    # $targetCommitMessage = git log $commitId -1
-    # Assert-IsMergeCommit -targetCommitMessage $targetCommitMessage
-
     $true
 }
 

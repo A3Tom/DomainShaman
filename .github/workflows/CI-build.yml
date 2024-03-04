@@ -1,28 +1,22 @@
 
 name: CI
+run-name: Continuous Integration Versioning
 on:
   push:
     branches: [ "master" ]
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: windows-latest
+  if_merged:
+    if: github.event.pull_request.merged == true
+    Apply-SemVer-Tag:
+      runs-on: windows-latest
+      steps:
+        - name: Banksy
+          uses: actions/checkout@v2
+          continue-on-error: true
+          shell: pwsh
+          run: |
+            $nextVersion = .\version_chanter.ps1 ${{ github.sha }}
 
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Banksy
-        continue-on-error: true
-        shell: pwsh
-        run: |
-          echo "Targetting commit id: ${{ github.sha }}"
-          echo "Ensuring id exists..."
-          git show ${{ github.sha }} --pretty=format:"%H"
-          echo "confirmed."
-          echo "latest merge id :"
-          git log -1 --merges --pretty=format:"%h"
-          
-          $nextVersion = .\version_chanter.ps1 ${{ github.sha }}
-
-          echo Taggin complete
+            echo Taggin complete
