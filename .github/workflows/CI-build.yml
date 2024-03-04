@@ -12,6 +12,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Banksy
+        continue-on-error: true
         shell: pwsh
         run: |
           $nextVersion = .\version_chanter.ps1 ${{ github.sha }}
