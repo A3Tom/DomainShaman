@@ -20,6 +20,6 @@ jobs:
         continue-on-error: true
         shell: pwsh
         run: |
-          $nextVersion = .\version_chanter.ps1 ${{ github.sha }}
+          $nextVersion = .\version_chanter.ps1 ${{ github.sha }} ${{ github.head_ref }}
 
           echo Taggin complete

@@ -67,14 +67,17 @@ function Get-MergeSourceBranchRegex {
 }
 
 function Assert-IsMinorVersionIncrement {
+    param (
+        [string]$sourceBranchName
+    )
     $minorVersionMergeSourceRegex = Get-MergeSourceBranchRegex
     $minorVersionBranchNames = $minorVersionMergeSources -join ", "
-    If ($targetCommitMessage -match $minorVersionMergeSourceRegex) {
-        Write-Host "[$minorVersionBranchNames] match found in commit message. Increasin the minor version."
+    If ($sourceBranchName -match $minorVersionMergeSourceRegex) {
+        Write-Host "[$minorVersionBranchNames] match found in branch: $sourceBranchName. Increasin the minor version."
         return $true
     }
 
-    Write-Host "[$minorVersionBranchNames] match not found in commit message. Increasin the patch version."
+    Write-Host "[$minorVersionBranchNames] match not found in branch: $sourceBranchName. Increasin the patch version."
     $false
 }
 
@@ -126,7 +129,7 @@ function Set-NextVersionTag {
 }
 
 $commitId = Set-TargetCommitId -commitId $args[0]
-$isMinorRevision = Assert-IsMinorVersionIncrement
+$isMinorRevision = Assert-IsMinorVersionIncrement -sourceBranchName $args[1]
 $latestVersion = Get-CurrentVersion -tags $tags
 $nextVersion = Get-NextVersion -latestVersion $latestVersion -isMinorRevision $isMinorRevision
 
