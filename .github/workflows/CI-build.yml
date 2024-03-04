@@ -8,12 +8,13 @@ on:
 
 jobs:
   if_merged:
-    if: github.event.pull_request.merged == true
     runs-on: windows-latest
+    if: github.event.pull_request.merged == true
     Apply-SemVer-Tag:
       steps:
+        - uses: actions/checkout@v4
+
         - name: Banksy
-          uses: actions/checkout@v2
           continue-on-error: true
           shell: pwsh
           run: |
