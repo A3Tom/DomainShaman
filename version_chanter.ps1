@@ -1,6 +1,6 @@
+git pull
 $pipelineProvider = "github"
 $minorVersionMergeSources = @("feature")
-
 
 function Assert-IsGithubMergeCommit {
     param (
@@ -133,7 +133,6 @@ function Set-NextVersionTag {
     git tag -a "release/v$nextVersion" $targetCommitId -m "Release v$nextVersion"
     git push --tag
 }
-
 
 $commitId = Set-TargetCommitId -commitId $args[0]
 $isMinorRevision = Assert-IsMinorVersionIncrement
