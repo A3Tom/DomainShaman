@@ -14,7 +14,14 @@ jobs:
       - name: Banksy
         shell: pwsh
         run: |
-          .\version_chanter.ps1
+
+          $nextVersion = .\version_chanter.ps1
+
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git tag -a "release/v$nextVersion" ${{ github.sha }} -m "Release v$nextVersion"
+          git push --tag
+
 
       - name: Run a multi-line script
         run: |
