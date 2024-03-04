@@ -16,8 +16,10 @@ jobs:
         continue-on-error: true
         shell: pwsh
         run: |
-          git pull origin master
+          echo Targetting commit id: ${{ github.sha }}
+          echo Ensuring id exists...
           git show ${{ github.sha }} --pretty=format:"%H"
+          echo confirmed
           
           $nextVersion = .\version_chanter.ps1 ${{ github.sha }}
 
