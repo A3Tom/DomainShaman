@@ -89,6 +89,9 @@ $nextVersion = Get-NextVersion -latestVersion $latestVersion -isMinorRevision $i
 
 Write-Host "Next version: $nextVersion"
 
-# Tag git commit
-git tag -a "release/v$nextVersion" $targetCommitId -m "Release v$nextVersion"
-git push --tag
+return $nextVersion
+
+# # Tag git commit
+# git tag -a "release/v$nextVersion" $targetCommitId -m "Release v$nextVersion"
+# git push --tag
+
