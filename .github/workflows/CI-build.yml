@@ -7,16 +7,16 @@ on:
   workflow_dispatch:
 
 jobs:
-  if_merged:
+  Apply-SemVer-Tag:
     if: github.event.pull_request.merged == true
-    Apply-SemVer-Tag:
-      runs-on: windows-latest
-      steps:
-        - name: Banksy
-          uses: actions/checkout@v2
-          continue-on-error: true
-          shell: pwsh
-          run: |
-            $nextVersion = .\version_chanter.ps1 ${{ github.sha }}
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
 
-            echo Taggin complete
+      - name: Banksy
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          $nextVersion = .\version_chanter.ps1 ${{ github.sha }}
+
+          echo Taggin complete
