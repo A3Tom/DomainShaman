@@ -14,7 +14,6 @@ jobs:
       - name: Banksy
         shell: pwsh
         run: |
-          $commitId = ${{ github.sha }}
-          $nextVersion = .\version_chanter.ps1 $commitId
+          $nextVersion = .\version_chanter.ps1 ${{ github.sha }}
 
           echo Taggin complete
