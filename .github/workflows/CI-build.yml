@@ -16,10 +16,12 @@ jobs:
         continue-on-error: true
         shell: pwsh
         run: |
-          echo Targetting commit id: ${{ github.sha }}
-          echo Ensuring id exists...
+          echo "Targetting commit id: ${{ github.sha }}"
+          echo "Ensuring id exists..."
           git show ${{ github.sha }} --pretty=format:"%H"
-          echo confirmed
+          echo "confirmed."
+          echo "latest merge id :"
+          git log -1 --merges --pretty=format:"%h"
           
           $nextVersion = .\version_chanter.ps1 ${{ github.sha }}
 
