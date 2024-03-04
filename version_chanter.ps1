@@ -63,7 +63,7 @@ function Set-TargetCommitId {
 
 function Get-MergeSourceBranchRegex {
     $branchNames = $minorVersionMergeSources -join "|"
-    "[from\w]\S+[\/](?:$branchNames)\/\S+"
+    "^(?:$branchNames)\/\S+"
 }
 
 function Assert-IsMinorVersionIncrement {
