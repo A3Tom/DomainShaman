@@ -2,13 +2,16 @@
 name: CI
 run-name: Continuous Integration Versioning
 on:
-  pull_request:
-    types: ["closed"]
+  pull_request_target:
+    types: 
+      - closed
+    branches:
+      - master
   workflow_dispatch:
 
 jobs:
   Apply-SemVer-Tag:
-    if: ${{ github.ref }} == 'refs/heads/master'
+    if: github.event.pull_request.merged == true
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
