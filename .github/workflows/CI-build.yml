@@ -16,6 +16,9 @@ jobs:
         continue-on-error: true
         shell: pwsh
         run: |
+          git pull origin master
+          git show ${{ github.sha }} --pretty=format:"%H"
+          
           $nextVersion = .\version_chanter.ps1 ${{ github.sha }}
 
           echo Taggin complete
