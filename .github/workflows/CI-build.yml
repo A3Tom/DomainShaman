@@ -9,8 +9,8 @@ on:
 jobs:
   if_merged:
     if: github.event.pull_request.merged == true
+    runs-on: windows-latest
     Apply-SemVer-Tag:
-      runs-on: windows-latest
       steps:
         - name: Banksy
           uses: actions/checkout@v2
