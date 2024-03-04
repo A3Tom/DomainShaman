@@ -8,7 +8,7 @@ on:
 
 jobs:
   Apply-SemVer-Tag:
-    if: ${{ GITHUB_REF }} == 'refs/heads/master'
+    if: ${{ github.ref }} == 'refs/heads/master'
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
