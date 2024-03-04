@@ -1,3 +1,6 @@
+git config user.name github-actions
+git config user.email github-actions@github.com
+git fetch
 $pipelineProvider = "github"
 $minorVersionMergeSources = @("feature")
 
@@ -77,7 +80,6 @@ function Assert-IsMinorVersionIncrement {
 
 
 function Get-CurrentReleaseVersions {
-    git fetch --tags
     $tags = git tag
     $tags | Where-Object { $_ -like 'release/v*' } | ForEach-Object { $_ -replace "release/v", "" }
 }
